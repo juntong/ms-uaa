@@ -1,3 +1,5 @@
+import { ResponseCreateUserDto } from './dto/response-create-user.dto';
+import { plainToInstance } from 'class-transformer';
 import {
   Controller,
   Get,
@@ -16,7 +18,10 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    const user = this.userService.create(createUserDto);
+    return plainToInstance(ResponseCreateUserDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @UseGuards(JwtAuthGuard)
